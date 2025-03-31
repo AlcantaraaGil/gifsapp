@@ -9,9 +9,15 @@ import { map, Observable, tap } from 'rxjs';
 const GIF_KEY = 'gifs';
 
 const loadFromLocalStorage = () => {
-  const gifsFromLocalStorage = localStorage.getItem(GIF_KEY) ?? '';
-  const gifs = JSON.parse(gifsFromLocalStorage);
-  return gifs;
+  const gifsFromLocalStorage = localStorage.getItem(GIF_KEY);
+  if (!gifsFromLocalStorage) return {}; // Retorna un objeto vacío si no hay datos
+
+  try {
+    return JSON.parse(gifsFromLocalStorage);
+  } catch (error) {
+    console.error('Error al parsear JSON desde localStorage', error);
+    return {}; // Si hay un error, retorna un objeto vacío
+  }
 };
 
 @Injectable({ providedIn: 'root' })
